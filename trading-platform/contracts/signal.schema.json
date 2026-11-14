@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Signal",
+  "description": "What a strategy wants to hold. Consumed by the risk manager, never sent to a broker directly.",
+  "type": "object",
+  "required": ["strategy", "symbol", "timestamp", "target_position"],
+  "properties": {
+    "strategy": {"type": "string"},
+    "symbol": {"type": "string"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "target_position": {"type": "number", "minimum": 0, "maximum": 1,
+      "description": "Fraction of the allocated capital to hold. 0 = flat."},
+    "reason": {"type": "string"}
+  },
+  "additionalProperties": false
+}
