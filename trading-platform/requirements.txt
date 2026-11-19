@@ -1,0 +1,5 @@
+# One shared environment for every service. Each service still lists its own needs;
+# this file just pulls them together so you install once, not once per service.
+-r services/strategy-engine/requirements.txt
+-r services/execution/requirements.txt
+-r services/risk-manager/requirements.txt

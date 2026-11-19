@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OrderRequest",
+  "description": "An order approved to go to a broker. Only the risk manager should produce these.",
+  "type": "object",
+  "required": ["client_order_id", "symbol", "side", "qty"],
+  "properties": {
+    "client_order_id": {"type": "string", "minLength": 8,
+      "description": "Unique per order. Sending the same id twice never creates two orders."},
+    "symbol": {"type": "string"},
+    "side": {"enum": ["buy", "sell"]},
+    "qty": {"type": "number", "exclusiveMinimum": 0}
+  },
+  "additionalProperties": false
+}
