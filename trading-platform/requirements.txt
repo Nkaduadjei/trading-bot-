@@ -4,3 +4,4 @@
 -r services/execution/requirements.txt
 -r services/risk-manager/requirements.txt
 -r services/auth-service/requirements.txt
+-r services/api-gateway/requirements.txt

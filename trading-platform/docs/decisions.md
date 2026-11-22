@@ -15,4 +15,9 @@
 13. **The risk manager never trusts the caller's numbers.** It reads equity, positions and the price from execution itself. The request has no price field at all.
 14. **A stop closer than 0.5% to the price is refused,** so the per-trade risk limit cannot be gamed with a tiny stop distance.
 15. **If anything is unreadable, the answer is no.** Execution unreachable, bad account data, or a corrupt state file all mean no approval.
+16. **The gateway is a whitelist, not a blind proxy.** Only listed routes exist. The kill switch, the paper price endpoint and the upstream docs pages cannot be reached from outside.
+17. **The auth service stays the only holder of the login secret.** The gateway checks each login by asking it, so the gateway cannot mint tokens.
+18. **The gateway has no signing key.** It forwards the risk manager's signed approval untouched. A bug or break-in at the gateway still cannot place an order the risk manager did not approve.
+19. **Trading is allowed only for emails in TRADER_EMAILS; empty means nobody.** There is one shared paper account for now, so being logged in is not enough.
+20. **Rate limits, a body-size cap and generic errors.** Login and register are limited to 10 per minute per address; errors never reveal internal addresses or tokens. One retry to execution is safe because orders are idempotent.
 
