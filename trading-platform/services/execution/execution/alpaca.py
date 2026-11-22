@@ -74,3 +74,15 @@ class AlpacaBroker:
         r = self._call("GET", "/v2/positions")
         r.raise_for_status()
         return {p["symbol"]: float(p["qty"]) for p in r.json()}
+
+    def account(self) -> dict:
+        """Equity and cash from /v2/account; positions and their prices from /v2/positions.
+        Prices exist only for symbols you hold. A price source for NEW symbols is not built yet."""
+        a = self._call("GET", "/v2/account")
+        a.raise_for_status()
+        p = self._call("GET", "/v2/positions")
+        p.raise_for_status()
+        rows = p.json()
+        return {"equity": float(a.json()["equity"]), "cash": float(a.json()["cash"]),
+                "positions": {r["symbol"]: float(r["qty"]) for r in rows},
+                "prices": {r["symbol"]: float(r["current_price"]) for r in rows}}

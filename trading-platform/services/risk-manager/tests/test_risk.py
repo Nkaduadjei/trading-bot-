@@ -120,3 +120,9 @@ def test_signal_to_order_sizing():
     held = state(positions={"SPY": 200}, prices={"SPY": 100.0})
     assert plan_order(dict(sig, target_position=0.0), held, 100.0).side == "sell"
     assert plan_order(sig, held, 100.0) is None  # already at target: nothing to do
+
+
+def test_stop_too_close_to_the_price_is_refused():
+    d = RiskManager().check(buy(10, stop=99.9), state())
+    assert not d.approved and "too close" in d.reasons[0]
+    assert RiskManager().check(buy(10, stop=99.5), state()).approved   # exactly 0.5% is allowed

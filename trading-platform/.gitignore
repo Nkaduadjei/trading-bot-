@@ -14,3 +14,5 @@ data/*.csv
 .update-backup/
 *.db
 *.sqlite3
+risk_state.json
+kill_switch.json

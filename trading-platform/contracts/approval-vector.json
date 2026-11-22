@@ -1,0 +1,12 @@
+{
+  "key": "test-key-test-key-test-key-test-key-1234",
+  "order": {
+    "client_order_id": "vector-order-0001",
+    "symbol": "SPY",
+    "side": "buy",
+    "qty": 10
+  },
+  "approved_at": 1700000000,
+  "signature": "11b9e099f4489d4088df088cb874ddee31066f55b5980e55b45b49d85ec349e2",
+  "canonical_message": "{\"approved_at\":1700000000,\"order\":{\"client_order_id\":\"vector-order-0001\",\"qty\":10.0,\"side\":\"buy\",\"symbol\":\"SPY\"}}"
+}

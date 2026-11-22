@@ -64,6 +64,10 @@ class FakeResp:
     def json(self):
         return self._d
 
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise requests.HTTPError(f"HTTP {self.status_code}")
+
 
 class FakeSession:
     """Records calls. `script` maps (method, path) to a list of responses or exceptions."""
@@ -106,3 +110,21 @@ def test_alpaca_gives_up_cleanly_when_unreachable():
                      ("GET", "/v2/orders:by_client_order_id"): [err] * 3})
     o = AlpacaBroker("k", "s", session=s).submit(req())
     assert o.status == "rejected" and o.reason == "broker unreachable"
+
+
+def test_paper_account_summary():
+    b = PaperBroker(cash=10_000)
+    b.set_price("SPY", 100.0)
+    b.submit(req())
+    a = b.account()
+    assert a["positions"] == {"SPY": 10} and a["prices"] == {"SPY": 100.0}
+    assert a["equity"] == pytest.approx(a["cash"] + 1000)
+
+
+def test_alpaca_account_reads_equity_and_positions():
+    s = FakeSession({("GET", "/v2/account"): [FakeResp(200, {"equity": "10500", "cash": "9500"})],
+                     ("GET", "/v2/positions"): [FakeResp(200, [
+                         {"symbol": "SPY", "qty": "10", "current_price": "100.5"}])]})
+    a = AlpacaBroker("k", "s", session=s).account()
+    assert a == {"equity": 10500.0, "cash": 9500.0, "positions": {"SPY": 10.0},
+                 "prices": {"SPY": 100.5}}

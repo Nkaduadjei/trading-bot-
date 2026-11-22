@@ -60,6 +60,8 @@ class RiskManager:
             return self._reject(f"daily loss limit {c.daily_loss_limit:.0%} reached")
         if o.stop_price is None or not _ok(o.stop_price) or not 0 < o.stop_price < o.price:
             return self._reject("a buy needs a stop price below the entry price")
+        if o.price - o.stop_price < c.min_stop_distance_pct * o.price - 1e-12:
+            return self._reject(f"stop is too close to the price (minimum {c.min_stop_distance_pct:.1%})")
 
         held = st.positions.get(o.symbol, 0.0)
         exposure = sum(q * st.prices[s] for s, q in st.positions.items())

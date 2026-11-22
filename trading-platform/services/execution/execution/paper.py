@@ -59,3 +59,8 @@ class PaperBroker:
 
     def positions(self) -> dict:
         return {s: q for s, q in self._pos.items() if q}
+
+    def account(self) -> dict:
+        equity = self.cash + sum(q * self._prices.get(s, 0.0) for s, q in self._pos.items())
+        return {"equity": equity, "cash": self.cash, "positions": self.positions(),
+                "prices": dict(self._prices)}

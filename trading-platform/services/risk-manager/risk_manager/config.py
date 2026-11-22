@@ -11,11 +11,12 @@ class RiskConfig:
     daily_loss_limit: float = 0.02    # no new buys for the rest of the day after this loss
     max_drawdown: float = 0.10        # from the equity peak; halts until a human releases it
     min_trade_pct: float = 0.005      # ignore rebalances smaller than this, to avoid churn
+    min_stop_distance_pct: float = 0.005  # a stop closer than this to the price is refused
     whole_shares: bool = True
 
     def __post_init__(self):
         for name in ("max_risk_per_trade", "max_position_pct", "max_exposure_pct",
-                     "daily_loss_limit", "max_drawdown"):
+                     "daily_loss_limit", "max_drawdown", "min_stop_distance_pct"):
             v = getattr(self, name)
             if not 0 < v <= 1:
                 raise ValueError(f"{name} must be in (0, 1], got {v}")
