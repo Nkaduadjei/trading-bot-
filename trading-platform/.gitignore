@@ -12,3 +12,5 @@ data/*.csv
 .idea/
 .vscode/
 .update-backup/
+*.db
+*.sqlite3

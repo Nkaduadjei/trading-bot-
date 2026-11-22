@@ -3,3 +3,4 @@
 -r services/strategy-engine/requirements.txt
 -r services/execution/requirements.txt
 -r services/risk-manager/requirements.txt
+-r services/auth-service/requirements.txt

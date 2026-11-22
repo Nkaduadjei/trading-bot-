@@ -1,2 +1,2 @@
 # admin-console
-Spring Boot service. Not started.
+Python (FastAPI) service. Not started.
