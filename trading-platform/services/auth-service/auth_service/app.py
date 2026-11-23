@@ -1,8 +1,9 @@
+import hmac
 import logging
 import re
 from typing import Optional
 
-from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi import Depends, FastAPI, Header, HTTPException, Response
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy import select
@@ -72,6 +73,16 @@ def create_app(settings: Settings) -> FastAPI:
     @app.get("/health")
     def health():
         return {"status": "ok"}
+
+    if settings.admin_token:
+        @app.get("/internal/users")
+        def internal_users(x_internal_token: Optional[str] = Header(None), db: Session = Depends(get_db)):
+            if not x_internal_token or not hmac.compare_digest(x_internal_token, settings.admin_token):
+                raise HTTPException(401, "internal token required")
+            now = settings.clock()
+            return [{"id": u.id, "email": u.email, "totp_enabled": u.totp_enabled,
+                     "created_at": u.created_at, "locked": u.locked_until > now}
+                    for u in db.scalars(select(User).order_by(User.id)).all()]
 
     @app.post("/auth/register", status_code=201)
     def register(body: RegisterIn, db: Session = Depends(get_db)):

@@ -16,3 +16,4 @@ data/*.csv
 *.sqlite3
 risk_state.json
 kill_switch.json
+admin_audit.log

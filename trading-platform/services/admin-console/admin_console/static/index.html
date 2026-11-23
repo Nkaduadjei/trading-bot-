@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin console</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><h1>Admin console</h1><span id="who"></span><button id="logout" hidden>Log out</button></header>
+<main>
+  <section id="login" class="card">
+    <h2>Admin login</h2>
+    <form id="loginform">
+      <label>Email <input id="email" type="email" autocomplete="username" required></label>
+      <label>Password <input id="password" type="password" autocomplete="current-password" required></label>
+      <label>2FA code (if enabled) <input id="code" inputmode="numeric" autocomplete="one-time-code"></label>
+      <button type="submit">Log in</button>
+      <p id="loginmsg" role="alert"></p>
+    </form>
+  </section>
+  <div id="panel" hidden>
+    <section class="card"><h2>Services</h2><ul id="services"></ul></section>
+    <section class="card">
+      <h2>Kill switch</h2>
+      <p id="killstate">Checking...</p>
+      <label>Reason <input id="reason" maxlength="200" value="manual stop"></label>
+      <div class="row"><button id="engage" class="danger">Stop all new buying</button><button id="release">Release</button></div>
+      <p class="hint">Selling is always still allowed. Releasing lets new buys through the risk checks again.</p>
+      <p id="killmsg" role="alert"></p>
+    </section>
+    <section class="card"><h2>Registered users</h2><table id="users"></table></section>
+    <section class="card"><h2>Recent admin actions</h2><pre id="audit"></pre></section>
+  </div>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>

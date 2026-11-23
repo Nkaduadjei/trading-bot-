@@ -158,3 +158,28 @@ def test_secrets_never_reach_the_logs(client, caplog):
         trade_only_confirmed=True))
     for s in (PW, "wrong-password-123", "TOPSECRETVALUE9999", "PKABCDEF123456", secret):
         assert s not in caplog.text
+
+
+def admin_app(clock):
+    s = Settings(jwt_secret="j" * 40, encryption_key=Fernet.generate_key().decode(),
+                 database_url="sqlite://", clock=clock, admin_token="a" * 40)
+    return TestClient(create_app(s))
+
+
+def test_internal_users_endpoint_needs_its_token_and_shows_no_secrets(clock):
+    c = admin_app(clock)
+    register(c)
+    assert c.get("/internal/users").status_code == 401
+    assert c.get("/internal/users", headers={"X-Internal-Token": "x" * 40}).status_code == 401
+    r = c.get("/internal/users", headers={"X-Internal-Token": "a" * 40})
+    assert r.status_code == 200 and set(r.json()[0]) == {"id", "email", "totp_enabled", "created_at", "locked"}
+    assert PW not in r.text and "scrypt" not in r.text
+
+
+def test_internal_users_endpoint_does_not_exist_without_a_token_setting(client):
+    assert client.get("/internal/users", headers={"X-Internal-Token": "a" * 40}).status_code == 404
+
+
+def test_short_admin_token_is_refused():
+    with pytest.raises(ValueError):
+        Settings(jwt_secret="j" * 40, encryption_key=Fernet.generate_key().decode(), admin_token="short")

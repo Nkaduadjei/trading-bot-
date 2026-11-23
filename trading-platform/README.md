@@ -2,7 +2,7 @@
 
 Automated trading platform: strategy engine, risk gate, broker execution, Spring Boot platform layer, dashboard.
 
-**Status:** backtester, execution service, risk manager (with signed approvals), auth service and API gateway built. Admin console and dashboard are next.
+**Status:** backtester, execution service, risk manager (with signed approvals), auth service, API gateway and admin console built. The dashboard is next.
 
 | Folder | Owns |
 |---|---|
@@ -11,7 +11,7 @@ Automated trading platform: strategy engine, risk gate, broker execution, Spring
 | `services/risk-manager` | Checks every order and signs the approved ones (built) |
 | `services/auth-service` | Python (FastAPI). Accounts, 2FA, encrypted broker keys (built) |
 | `services/api-gateway` | Python (FastAPI). The single front door on port 8000 (built) |
-| `services/admin-console` | Python (FastAPI). Health view and kill switch (not started) |
+| `services/admin-console` | Python (FastAPI). Health view, kill switch, users, audit log on port 8004 (built) |
 | `web/dashboard` | React dashboard (not started) |
 | `contracts/` | Shared JSON schemas. The only thing services share |
 | `infra/` | docker-compose, migrations, deploy scripts |
@@ -32,3 +32,6 @@ then `.venv/bin/python scripts/smoke_trading.py` to check they work together.
 
 Whole chain (four terminals): `run_auth.sh`, `run_execution.sh`, `run_risk.sh`, `run_gateway.sh`, then
 `.venv/bin/python scripts/smoke_gateway.py`. Put your email in `TRADER_EMAILS` in `.env` first.
+
+Admin console: `bash scripts/run_admin.sh`, open http://127.0.0.1:8004, log in with an email listed in `ADMIN_EMAILS`.
+Checks: `.venv/bin/python scripts/smoke_admin.py` (all five services running).

@@ -20,6 +20,7 @@ MAKERS = {
     "APPROVAL_KEY": lambda: secrets.token_urlsafe(48),         # risk manager signs, execution verifies
     "EXECUTION_TOKEN": lambda: secrets.token_urlsafe(48),      # who may call the execution service
     "RISK_TOKEN": lambda: secrets.token_urlsafe(48),           # who may call the risk manager
+    "AUTH_ADMIN_TOKEN": lambda: secrets.token_urlsafe(48),     # lets the admin console list users
 }
 
 

@@ -20,4 +20,9 @@
 18. **The gateway has no signing key.** It forwards the risk manager's signed approval untouched. A bug or break-in at the gateway still cannot place an order the risk manager did not approve.
 19. **Trading is allowed only for emails in TRADER_EMAILS; empty means nobody.** There is one shared paper account for now, so being logged in is not enough.
 20. **Rate limits, a body-size cap and generic errors.** Login and register are limited to 10 per minute per address; errors never reveal internal addresses or tokens. One retry to execution is safe because orders are idempotent.
+21. **The admin console listens on this computer only and checks the Host header.** Another web page you visit cannot trick your browser into talking to it.
+22. **Admin means logged in AND on ADMIN_EMAILS; empty means nobody.** Being a registered user gives no admin power.
+23. **Least privilege.** The console gets the risk manager token and a separate auth admin token. It never gets the signing key or the execution token, so even a compromised console cannot place orders.
+24. **The users endpoint lives on the auth service behind its own token and does not exist unless that token is set.** The gateway does not forward it. Only whitelisted fields are ever returned.
+25. **Every admin action is audited, and a failed kill-switch action says the state is UNKNOWN** instead of pretending it worked.
 

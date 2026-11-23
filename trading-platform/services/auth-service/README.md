@@ -13,6 +13,8 @@ Python (FastAPI). Accounts, login with optional 2FA, and encrypted storage of br
 Endpoints: `POST /auth/register`, `POST /auth/login`, `GET /me`, `POST /auth/2fa/setup`,
 `POST /auth/2fa/enable`, `POST /broker-keys`, `GET /broker-keys`, `DELETE /broker-keys/{id}`, `GET /health`.
 
+Internal (only exists when `AUTH_ADMIN_TOKEN` is set): `GET /internal/users` for the admin console. Not forwarded by the gateway.
+
 Run tests: `python -m pytest -q`. Run the server: `scripts/run_auth.sh` (needs `.env`, see `scripts/gen_secrets.py`).
 
 Not built yet: refresh tokens and logout, password reset, an internal endpoint for the execution
