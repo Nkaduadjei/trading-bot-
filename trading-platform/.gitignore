@@ -17,3 +17,6 @@ data/*.csv
 risk_state.json
 kill_switch.json
 admin_audit.log
+*.db-journal
+*.db-wal
+*.db-shm

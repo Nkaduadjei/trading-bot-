@@ -25,4 +25,10 @@
 23. **Least privilege.** The console gets the risk manager token and a separate auth admin token. It never gets the signing key or the execution token, so even a compromised console cannot place orders.
 24. **The users endpoint lives on the auth service behind its own token and does not exist unless that token is set.** The gateway does not forward it. Only whitelisted fields are ever returned.
 25. **Every admin action is audited, and a failed kill-switch action says the state is UNKNOWN** instead of pretending it worked.
+26. **The execution service owns the trading history** (orders, fills, equity snapshots). It is the only service that knows what really traded.
+27. **An order is written down BEFORE the broker is called.** The unique order id then stops double trades even across restarts. If the broker could not be reached, the order stays "submitted" so a retry is allowed.
+28. **Rejected orders are kept with their reason.** The history shows what the broker refused, not just what it did.
+29. **The paper account is rebuilt from saved fills and prices on startup.** The starting cash is fixed on first run and remembered, so a changed setting cannot rewrite history.
+30. **A held symbol with no known price makes the account unavailable,** instead of reporting a falsely low equity. A false drawdown would trip the kill switch. Refusing is safer.
+31. **SQLite now, PostgreSQL later by changing one setting.** Tables are created automatically for now; proper migrations (Alembic) come before anything real.
 

@@ -2,7 +2,7 @@
 
 Automated trading platform: strategy engine, risk gate, broker execution, Spring Boot platform layer, dashboard.
 
-**Status:** backtester, execution service, risk manager (with signed approvals), auth service, API gateway and admin console built. The dashboard is next.
+**Status:** backtester, execution service, risk manager (with signed approvals), auth service, API gateway, admin console and the order/trade database built. The dashboard is next.
 
 | Folder | Owns |
 |---|---|
@@ -35,3 +35,6 @@ Whole chain (four terminals): `run_auth.sh`, `run_execution.sh`, `run_risk.sh`, 
 
 Admin console: `bash scripts/run_admin.sh`, open http://127.0.0.1:8004, log in with an email listed in `ADMIN_EMAILS`.
 Checks: `.venv/bin/python scripts/smoke_admin.py` (all five services running).
+
+History: execution saves orders, fills and equity snapshots (`services/execution/execution.db`, private, ignored by git).
+Restart check: `.venv/bin/python scripts/smoke_persistence.py before`, restart execution, then `... after`.
